@@ -1,0 +1,6 @@
+C:\Users\PCZONE.GE\OneDrive - Caucasus University\Desktop\Registration\Database\bin\Debug\Database.dll
+C:\Users\PCZONE.GE\OneDrive - Caucasus University\Desktop\Registration\Database\bin\Debug\Database.pdb
+C:\Users\PCZONE.GE\OneDrive - Caucasus University\Desktop\Registration\Database\obj\Debug\Database.csproj.AssemblyReference.cache
+C:\Users\PCZONE.GE\OneDrive - Caucasus University\Desktop\Registration\Database\obj\Debug\Database.csproj.CoreCompileInputs.cache
+C:\Users\PCZONE.GE\OneDrive - Caucasus University\Desktop\Registration\Database\obj\Debug\Database.dll
+C:\Users\PCZONE.GE\OneDrive - Caucasus University\Desktop\Registration\Database\obj\Debug\Database.pdb
