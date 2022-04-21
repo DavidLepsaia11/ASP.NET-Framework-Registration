@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Database.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -30,8 +31,29 @@ namespace Database
                 return -1;
             }
         }
-       
-        public IDbCommand ExecuteCommand(string commandText, CommandType commandType, params IDataParameter[] parameters)
+
+        public bool IsValidateUser(string email, string password)
+        {
+            try
+            {
+                SqlParameter[] parameters = { new SqlParameter("@Email", email), new SqlParameter("@Password", password) };
+                var returnedUser = ExecuteCommand("GetUser_SP", CommandType.StoredProcedure, parameters).ExecuteReader();
+                if (returnedUser == null) throw new InvalidUserException("Such User does not exist !");
+                return true;
+            }
+            catch (InvalidUserException ex)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+
+        #region Helper Methods
+        private IDbCommand ExecuteCommand(string commandText, CommandType commandType, params IDataParameter[] parameters)
         {
            var command = _sqlConnection.CreateCommand();
 
@@ -43,5 +65,10 @@ namespace Database
           
             return command;
         }
+
+
+
+        #endregion
+
     }
 }
