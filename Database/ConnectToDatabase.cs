@@ -1,6 +1,7 @@
-﻿using Database.Exceptions;
+﻿
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -12,9 +13,12 @@ namespace Database
     public class ConnectToDatabase
     {
         private SqlConnection _sqlConnection;
+        private string _configConnection;
+        
         public ConnectToDatabase()
         {
-            _sqlConnection = new SqlConnection(@"server = DESKTOP-TEPR7CC; database = Users; integrated security = true");
+            _configConnection = ConfigurationManager.ConnectionStrings["ConnectToDatabase"].ConnectionString;
+            _sqlConnection = new SqlConnection(_configConnection);
         }
 
         public int Insert(string username, string email, string password)
@@ -22,7 +26,8 @@ namespace Database
             try
             {
                 SqlParameter[] parameters = { new SqlParameter("@Username", username), new SqlParameter("@Email", email), new SqlParameter("@Password", password) };
-                var result = ExecuteCommand("InsertCustomer_SP", CommandType.StoredProcedure, parameters).ExecuteNonQuery();
+                _sqlConnection.Open();
+                var result = GetCommand("InsertCustomer_SP", CommandType.StoredProcedure, parameters).ExecuteNonQuery();
                 _sqlConnection.Close();
                 return result;
             }
@@ -37,15 +42,24 @@ namespace Database
             try
             {
                 SqlParameter[] parameters = { new SqlParameter("@Email", email), new SqlParameter("@Password", password) };
-                var returnedUser = ExecuteCommand("GetUser_SP", CommandType.StoredProcedure, parameters).ExecuteReader();
-                if (returnedUser == null) throw new InvalidUserException("Such User does not exist !");
-                return true;
-            }
-            catch (InvalidUserException ex)
-            {
+                var command = GetCommand("GetUser_SP", CommandType.StoredProcedure, parameters);
+                _sqlConnection.Open();
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var testEmail = (string)reader["Email"];
+                    var testPassword = (string)reader["Password"];
+
+                    if (email == (string)reader["Email"] && password == (string)reader["Password"])
+                    {
+                        return true;
+                    }
+                }
+                 _sqlConnection.Close();
                 return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -53,11 +67,9 @@ namespace Database
 
 
         #region Helper Methods
-        private IDbCommand ExecuteCommand(string commandText, CommandType commandType, params IDataParameter[] parameters)
+        private SqlCommand GetCommand(string commandText, CommandType commandType, params IDataParameter[] parameters)
         {
            var command = _sqlConnection.CreateCommand();
-
-            _sqlConnection.Open();
             command.CommandType = commandType;
             command.CommandText = commandText;
             foreach (var p in parameters)
@@ -65,9 +77,6 @@ namespace Database
           
             return command;
         }
-
-
-
         #endregion
 
     }

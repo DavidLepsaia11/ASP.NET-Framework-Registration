@@ -1,0 +1,46 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Main.master.cs" Inherits="Registration.MasterPages.Main" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+       <table border="1" style="width: 100%;">
+			<tr>
+				<td colspan="2">
+					<h1>
+						<asp:ContentPlaceHolder runat="server" ID="SiteHeader">
+							Site Header
+						</asp:ContentPlaceHolder>
+					</h1>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" style="width: 200px;">
+					<p>Menu</p>
+					<ul>
+						<li><asp:HyperLink runat="server" NavigateUrl="~/MasterPages/Default.aspx">Home Page</asp:HyperLink></li>
+						<li><asp:HyperLink runat="server" NavigateUrl="~/MasterPages/AboutUs.aspx">About Page</asp:HyperLink></li>
+					</ul>
+
+				 <asp:ContentPlaceHolder runat="server" ID="LeftAdv" />
+					<br />
+					<div id="divContact" style="border: solid 1px;" runat="server">
+						Phone: 598794400
+						<br />
+						Email: <a href="mailto:davidlepsaia1121@gmail.com">davidlepsaia1121@gmail.com</a>
+					</div>
+				</td>
+				<td valign="top">
+					<asp:ContentPlaceHolder runat="server" ID="MainContent" >
+				        <p>&nbsp;</p>
+                    </asp:ContentPlaceHolder>
+				</td>
+			</tr>
+		</table>
+    </form>
+</body>
+</html>
