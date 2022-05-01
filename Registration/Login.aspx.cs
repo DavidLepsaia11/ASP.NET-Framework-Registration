@@ -1,6 +1,7 @@
 ﻿using Database;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -15,7 +16,7 @@ namespace Registration
             var session = Session["AuthorizedMember"];
             if (session != null)
             {
-                Response.Write(session);
+                Response.Write(Session.SessionID);
             }
         }
 
@@ -25,10 +26,12 @@ namespace Registration
             var connectToDatabase = new ConnectToDatabase();
             if (!connectToDatabase.IsValidateUser(Email.Text, Password.Text)) Response.Redirect("~/Error.aspx");
             else
+            {
                 Session["AuthorizedMember"] = random.Next(0, 10000).ToString();
-                Session.Timeout = 1;
                 Session.Add("AuthorizedMember", Session["AuthorizedMember"]);
                 Response.Redirect("~/MasterPages/Default.aspx");
+            }
         }
+
     }
 }

@@ -11,7 +11,10 @@ namespace Registration.MasterPages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["AuthorizedMember"] == null)
+            {
+                Response.Redirect("~/Login.aspx");
+            }
         }
     }
 }
